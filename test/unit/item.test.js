@@ -466,6 +466,15 @@ describe('Item', function () {
             item.unsetProtocolProfileBehavior('keyName');
             expect(item.toJSON()).to.have.property('protocolProfileBehavior').that.is.empty;
         });
+
+        it('should not unset protocolProfileBehavior from an Item', function () {
+            var item = new Item({
+                protocolProfileBehavior: { keyName: 'value' }
+            });
+
+            item.unsetProtocolProfileBehavior(null);
+            expect(item.toJSON()).to.have.property('protocolProfileBehavior').that.is.not.empty;
+        });
     });
 
     describe('.getProtocolProfileBehavior', function () {

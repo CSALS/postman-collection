@@ -73,6 +73,55 @@ describe('RequestAuth', function () {
         });
     });
 
+    it('should be able to construct with multiple options', function () {
+        var auth = new RequestAuth({
+            noauth: {
+                foo: 'bar'
+            },
+            basic: {
+                username: 'u', password: 'p'
+            },
+            type: 'noauth'
+        });
+
+        auth.use('basic', []);
+        expect(auth.type).to.equal('basic');
+        expect(auth.current()).to.eql({
+            username: 'u', password: 'p'
+        });
+    });
+
+    it('should be able to return the parameters of the selected auth type', function () {
+        var auth = new RequestAuth({
+            noauth: {
+                foo: 'bar'
+            },
+            type: 'noauth'
+        });
+
+        auth.use('noauth', []);
+        expect(auth.type).to.equal('noauth');
+        expect(auth.parameters().toObject()).to.eql({
+            foo: 'bar'
+        });
+    });
+
+    it('should return if options not present', function () {
+        var auth = new RequestAuth({
+            noauth: {
+                foo: 'bar'
+            },
+            type: 'noauth'
+        });
+
+        auth.use('noauth', []);
+        expect(auth.type).to.equal('noauth');
+        auth.update(null);
+        expect(auth.parameters().toObject()).to.eql({
+            foo: 'bar'
+        });
+    });
+
     it('should be able to clear an auth that is currently selected', function () {
         var auth = new RequestAuth({
             noauth: {
